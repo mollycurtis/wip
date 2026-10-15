@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Under This Sky</title>
   <meta name="description" content="Enter your name, birthday, birth time and birthplace to draw your natal chart: Sun, Moon, rising sign, every planet, houses, aspects, moon phase and more.">
-  <meta name="theme-color" content="#1d1735">
+  <meta name="theme-color" content="#0c1f3d">
   <meta property="og:title" content="Under This Sky">
   <meta property="og:description" content="Draw the sky you were born under. A natal chart experience.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +14,18 @@
 <style>
 :root {
   color-scheme: dark;
-  --ink: #1d1735;
-  --dusk: #2b2252;
-  --gold: #eccb86;
-  --gold-soft: rgba(236, 203, 134, 0.42);
-  --moon: #f6ecf3;
-  --mist: rgba(246, 236, 243, 0.8);
-  --faint: rgba(246, 236, 243, 0.16);
-  --fire: #e2825f;
-  --earth: #9cb98a;
-  --air: #9ec6ea;
-  --water: #9a93e0;
+  --ink: #0c1f3d;
+  --dusk: #16325e;
+  --accent: #7cc4ff;
+  --accent-soft: rgba(124, 196, 255, 0.42);
+  --moon: #ffffff;
+  --mist: rgba(255, 255, 255, 0.88);
+  --faint: rgba(255, 255, 255, 0.18);
+  --fire: #f2896b;
+  --earth: #9bd3a0;
+  --air: #cfe3ff;
+  --easy: #9bd3a0;
+  --water: #5fd0c8;
   --serif: "Cormorant Garamond", "Georgia", serif;
   --sans: "Josefin Sans", "Helvetica Neue", Arial, sans-serif;
   --glyph: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols 2", "Noto Sans Symbols", "DejaVu Sans", sans-serif;
@@ -56,8 +57,8 @@ body::before {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(80% 60% at 15% 0%, rgba(122, 96, 190, 0.28), transparent 70%),
-    radial-gradient(70% 55% at 90% 100%, rgba(189, 75, 135, 0.14), transparent 70%),
+    radial-gradient(80% 60% at 15% 0%, rgba(56, 128, 214, 0.34), transparent 70%),
+    radial-gradient(70% 55% at 90% 100%, rgba(40, 170, 190, 0.14), transparent 70%),
     var(--ink);
   pointer-events: none;
 }
@@ -74,7 +75,7 @@ body::before {
 main, .top { position: relative; z-index: 1; }
 
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -82,8 +83,11 @@ main, .top { position: relative; z-index: 1; }
 a { color: inherit; }
 
 .top {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -98,7 +102,7 @@ a { color: inherit; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(rgba(29, 23, 53, 0.9), rgba(29, 23, 53, 0));
+  background: linear-gradient(rgba(12, 31, 61, 0.9), rgba(12, 31, 61, 0));
 }
 
 .wordmark {
@@ -110,33 +114,15 @@ a { color: inherit; }
   color: var(--moon);
 }
 
-.jump {
-  display: flex;
-  gap: 1.35rem;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-}
-
-.jump a {
-  text-decoration: none;
-  color: var(--mist);
-  border-bottom: 1px solid transparent;
-  padding-bottom: 0.15rem;
-  transition: color 0.25s, border-color 0.25s;
-}
-
-.jump a:hover, .jump a.active { color: var(--gold); border-color: var(--gold-soft); }
-
 .intro {
-  min-height: calc(100vh - 4.5rem);
-  min-height: calc(100svh - 4.5rem);
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   max-width: 68rem;
   margin: 0 auto;
-  padding: 1rem clamp(1.25rem, 4vw, 3rem) 2.5rem;
+  padding: 5rem clamp(1.25rem, 4vw, 3rem) 2.5rem;
 }
 
 .intro-title {
@@ -170,14 +156,12 @@ a { color: inherit; }
   gap: 0.35em 0.5em;
 }
 
-.sentence input[type="text"],
-.sentence input[type="date"],
-.sentence input[type="time"] {
+.sentence input[type="text"] {
   font: inherit;
-  color: var(--gold);
+  color: var(--accent);
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--gold-soft);
+  border-bottom: 1px solid var(--accent-soft);
   border-radius: 0;
   padding: 0 0.15em 0.1em;
   min-width: 6ch;
@@ -186,9 +170,9 @@ a { color: inherit; }
   appearance: none;
 }
 
-.sentence input::placeholder { color: rgba(236, 203, 134, 0.62); font-style: italic; }
+.sentence input::placeholder { color: rgba(124, 196, 255, 0.62); font-style: italic; }
 
-.sentence input:focus { border-bottom-color: var(--gold); outline: none; }
+.sentence input:focus { border-bottom-color: var(--accent); outline: none; }
 
 .sentence input[aria-invalid="true"] { border-bottom-color: var(--fire); }
 
@@ -196,14 +180,11 @@ a { color: inherit; }
 
 #date { width: 7.6em; }
 
-#time { width: 6.4em; }
+#time { width: 5.4em; }
 
 .at-wrap { display: inline-flex; align-items: baseline; gap: 0.5em; }
 
-input[type="date"], input[type="time"] { font-variant-numeric: tabular-nums; }
-
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: pointer; }
+#date, #time { font-variant-numeric: lining-nums tabular-nums; }
 
 .line-place { position: relative; z-index: 10; }
 
@@ -220,7 +201,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   margin: 0;
   padding: 0.4rem 0;
   list-style: none;
-  background: #2b2252;
+  background: #16325e;
   border: 1px solid var(--faint);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
   font-family: var(--sans);
@@ -235,7 +216,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 
 .place-list li small { display: block; color: var(--mist); }
 
-.place-list li:hover, .place-list li[aria-selected="true"] { background: rgba(217, 184, 108, 0.12); }
+.place-list li:hover, .place-list li[aria-selected="true"] { background: rgba(124, 196, 255, 0.12); }
 
 .place-list li.place-status { cursor: default; color: var(--mist); background: none; }
 
@@ -261,7 +242,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   width: 1rem;
   height: 1rem;
   margin: 0;
-  accent-color: var(--gold);
+  accent-color: var(--accent);
 }
 
 .manual {
@@ -317,113 +298,36 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   font-size: 0.95rem;
   letter-spacing: 0.06em;
   color: var(--ink);
-  background: var(--gold);
+  background: var(--accent);
   border: 0;
   padding: 1rem 2.2rem;
   cursor: pointer;
   transition: transform 0.3s var(--ease), box-shadow 0.3s;
 }
 
-.cast:hover { box-shadow: 0 0 0 6px rgba(217, 184, 108, 0.15); }
+.cast:hover { box-shadow: 0 0 0 6px rgba(124, 196, 255, 0.15); }
 
 .cast:active { transform: translateY(1px); }
 
 .cast:disabled { opacity: 0.6; cursor: wait; }
 
-.results {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3rem) 6rem;
-}
-
-.results-hero {
-  padding: 3rem 0 2rem;
-  max-width: 52rem;
-}
-
-.born {
-  margin: 0 0 1rem;
-  color: var(--mist);
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-}
-
-.headline {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(2rem, 5vw, 3.6rem);
-  line-height: 1.1;
-  margin: 0 0 2.5rem;
-  text-wrap: balance;
-}
-
-.big-three {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--faint);
-  border-bottom: 1px solid var(--faint);
-}
-
-.big-three > div {
-  padding: 1.5rem 1.25rem 1.5rem 0;
-}
-
-.big-three > div + div {
-  border-left: 1px solid var(--faint);
-  padding-left: 1.5rem;
-}
-
-.big-three .role { font-size: 0.85rem; color: var(--mist); margin: 0 0 0.4rem; }
-
-.big-three .sign {
-  font-family: var(--serif);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  line-height: 1.1;
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.big-three .glyph { font-family: var(--glyph); font-size: 0.85em; color: var(--gold); }
-
-.big-three .deg { font-size: 0.85rem; color: var(--mist); margin: 0.4rem 0 0; font-variant-numeric: tabular-nums; }
-
-.split {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: start;
-  padding: 3rem 0;
-}
-
-.wheel-wrap {
-  position: sticky;
-  top: 4.5rem;
-}
-
 #wheel {
   width: 100%;
+  max-width: min(100%, 72vh);
+  margin: 0 auto;
   height: auto;
   display: block;
   font-family: var(--glyph);
   user-select: none;
 }
 
-.wheel-hint {
-  text-align: center;
-  color: var(--mist);
-  font-size: 0.85rem;
-  margin: 0.75rem 0 0;
-}
+.ring { fill: none; stroke: var(--accent-soft); stroke-width: 1; }
 
-.ring { fill: none; stroke: var(--gold-soft); stroke-width: 1; }
-
-.ring.outer { stroke: var(--gold); stroke-width: 1.2; }
+.ring.outer { stroke: var(--accent); stroke-width: 1.2; }
 
 .sign-seg { fill: rgba(255, 255, 255, 0); stroke: var(--faint); stroke-width: 1; cursor: pointer; transition: fill 0.3s; }
 
-.sign-seg:hover, .sign-seg.active { fill: rgba(217, 184, 108, 0.1); }
+.sign-seg:hover, .sign-seg.active { fill: rgba(124, 196, 255, 0.1); }
 
 .sign-glyph { font-size: 22px; fill: var(--moon); pointer-events: none; opacity: 0.9; }
 
@@ -435,9 +339,9 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 
 .house-line { stroke: var(--faint); stroke-width: 1; }
 
-.angle-line { stroke: var(--gold); stroke-width: 1.2; }
+.angle-line { stroke: var(--accent); stroke-width: 1.2; }
 
-.angle-label { font-family: var(--sans); font-size: 11px; fill: var(--gold); letter-spacing: 0.08em; }
+.angle-label { font-family: var(--sans); font-size: 11px; fill: var(--accent); letter-spacing: 0.08em; }
 
 .planet { cursor: pointer; }
 
@@ -445,25 +349,25 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 
 .planet .glyph { font-size: 24px; fill: var(--moon); transition: fill 0.25s; }
 
-.planet .glyph.sun { fill: var(--gold); }
+.planet .glyph.sun { fill: var(--accent); }
 
 .planet .deg { font-family: var(--sans); font-size: 9px; fill: var(--mist); }
 
 .planet .rx { font-family: var(--sans); font-size: 8px; fill: var(--fire); }
 
-.planet:hover .glyph, .planet.active .glyph { fill: var(--gold); }
+.planet:hover .glyph, .planet.active .glyph { fill: var(--accent); }
 
 .planet.active .halo { opacity: 1; }
 
-.planet .halo { fill: none; stroke: var(--gold); stroke-width: 1; opacity: 0; transition: opacity 0.25s; }
+.planet .halo { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0; transition: opacity 0.25s; }
 
 .aspect-line { stroke-width: 1; opacity: 0.55; transition: opacity 0.3s, stroke-width 0.3s; }
 
-.aspect-line.easy { stroke: var(--air); }
+.aspect-line.easy { stroke: var(--easy); }
 
 .aspect-line.tense { stroke: var(--fire); }
 
-.aspect-line.fused { stroke: var(--gold); }
+.aspect-line.fused { stroke: var(--accent); }
 
 #wheel.has-focus .aspect-line { opacity: 0.08; }
 
@@ -487,7 +391,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   gap: 0.6rem;
 }
 
-.focus-title .glyph { font-family: var(--glyph); color: var(--gold); font-size: 0.85em; }
+.focus-title .glyph { font-family: var(--glyph); color: var(--accent); font-size: 0.85em; }
 
 .focus p { margin: 0 0 1rem; max-width: var(--measure); }
 
@@ -508,7 +412,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.25rem;
-  color: var(--gold);
+  color: var(--accent);
   margin: 0 0 1rem;
 }
 
@@ -523,154 +427,11 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   color: var(--mist);
 }
 
-.block {
-  padding: 3.5rem 0 1rem;
-  border-top: 1px solid var(--faint);
-}
-
-.block-title {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
-  line-height: 1.1;
-  margin: 0 0 1rem;
-}
-
-.block-lead {
-  max-width: var(--measure);
-  color: var(--mist);
-  margin: 0 0 2.25rem;
-}
-
-.rows { display: flex; flex-direction: column; }
-
-.row {
-  border-top: 1px solid var(--faint);
-}
-
-.row summary {
-  list-style: none;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: 2.2rem minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 1.1rem 0;
-}
-
-.row summary::-webkit-details-marker { display: none; }
-
-.row summary:hover .row-title { color: var(--gold); }
-
-.row .row-glyph { font-family: var(--glyph); font-size: 1.4rem; color: var(--gold); line-height: 1; }
-
-.row .row-title {
-  font-family: var(--serif);
-  font-size: 1.45rem;
-  line-height: 1.2;
-  transition: color 0.25s;
-}
-
-.row .row-sub { display: block; font-family: var(--sans); font-size: 0.85rem; color: var(--mist); margin-top: 0.2rem; }
-
-.row .row-side { font-size: 0.85rem; color: var(--mist); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
-
-.row .rx { color: var(--fire); }
-
-.row-body {
-  padding: 0 0 1.5rem 3.2rem;
-  max-width: calc(var(--measure) + 3.2rem);
-}
-
-.row-body p { margin: 0 0 0.9rem; }
-
-.row-body .note { font-size: 0.88rem; color: var(--mist); }
-
-.row[open] summary .row-title { color: var(--gold); }
-
-.angles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  gap: 1rem 2rem;
-  margin: 0 0 2.5rem;
-}
-
-.angles div { font-size: 0.9rem; color: var(--mist); }
-
-.angles strong {
-  display: block;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 1.4rem;
-  color: var(--moon);
-  line-height: 1.2;
-}
-
-.balance-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: 3rem;
-}
-
-.bars h4 {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 1.5rem;
-  margin: 0 0 1.25rem;
-}
-
-.bar { margin: 0 0 1rem; }
-
-.bar-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 0.9rem;
-  margin: 0 0 0.35rem;
-}
-
-.bar-head span:last-child { color: var(--mist); font-family: var(--glyph); letter-spacing: 0.15em; }
-
-.bar-track { height: 3px; background: var(--faint); }
-
-.bar-fill { height: 100%; width: 0; transition: width 1.2s var(--ease); }
-
-.bar-text { margin: 1.5rem 0 0; max-width: var(--measure); }
-
-.more-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 2.5rem 3rem;
-}
-
-.more-item .label { font-size: 0.85rem; color: var(--mist); margin: 0 0 0.5rem; }
-
-.more-item .value {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 1.15;
-  margin: 0 0 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.more-item p { margin: 0; color: var(--mist); font-size: 0.95rem; }
-
 .phase-icon { width: 2.4rem; height: 2.4rem; flex: none; }
 
-.phase-icon .dark { fill: #3a2f66; }
+.phase-icon .dark { fill: #1f3d6b; }
 
 .phase-icon .lit { fill: var(--moon); }
-
-.results-footer {
-  margin-top: 4rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--faint);
-}
-
-.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0 0 1.5rem; }
 
 .ghost {
   font-family: var(--sans);
@@ -678,15 +439,538 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   font-size: 0.9rem;
   color: var(--moon);
   background: transparent;
-  border: 1px solid var(--gold-soft);
+  border: 1px solid var(--accent-soft);
   padding: 0.7rem 1.3rem;
   cursor: pointer;
   transition: border-color 0.25s, color 0.25s;
 }
 
-.ghost:hover { border-color: var(--gold); color: var(--gold); }
+.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-.method { max-width: var(--measure); font-size: 0.85rem; color: var(--mist); margin: 0; }
+#wheel :focus { outline: none; }
+
+.sign-seg:focus-visible, .house-seg:focus-visible { stroke: var(--accent); stroke-width: 1.5; }
+
+.planet:focus-visible .halo { opacity: 1; }
+
+.jump { display: flex; align-items: center; gap: 0.2rem; }
+
+.jump a {
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  color: var(--mist);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.25s, background 0.25s;
+}
+
+.jump a:hover { color: var(--moon); background: rgba(255, 255, 255, 0.07); }
+
+.jump a.on { color: var(--ink); background: var(--accent); }
+
+.top-right { display: flex; align-items: center; gap: 1rem; }
+
+.counter {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--mist);
+  font-variant-numeric: tabular-nums;
+}
+
+html.deck-on { scroll-snap-type: y mandatory; }
+
+.slide {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 5.5rem clamp(1.25rem, 5vw, 4.5rem) 3.5rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.slide-in {
+  width: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+.flip .slide-in {
+  opacity: 0;
+  transform: perspective(1600px) rotateX(16deg) translateY(70px) scale(0.97);
+  transform-origin: 50% 0%;
+  transition: opacity 0.7s var(--ease), transform 1.1s var(--ease);
+}
+
+.flip .slide.in .slide-in { opacity: 1; transform: none; }
+
+.kicker {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.slide-title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.1rem, min(4.4vw, 7vh), 3.6rem);
+  line-height: 1.08;
+  margin: 0 0 1rem;
+  text-wrap: balance;
+}
+
+.slide-lead {
+  max-width: 46rem;
+  margin: 0 0 2rem;
+  color: var(--mist);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+}
+
+.two {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.two.even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+
+.panel {
+  border: 1px solid var(--faint);
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 18px;
+}
+
+.hero .slide-title { font-size: clamp(2.4rem, min(5.4vw, 8vh), 4.6rem); max-width: 22ch; }
+
+.big-three {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: clamp(1.5rem, 4vh, 2.75rem);
+}
+
+.b3 { padding: 1.4rem 1.5rem; }
+
+.b3 .role {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.b3 .sign {
+  margin: 0 0 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  line-height: 1.1;
+}
+
+.glyph-t { font-family: var(--glyph); color: var(--accent); font-size: 0.8em; }
+
+.b3 .what { margin: 0; color: var(--mist); font-size: 0.95rem; }
+
+.scroll-hint {
+  margin: clamp(1.5rem, 4vh, 2.5rem) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--mist);
+  font-size: 0.88rem;
+}
+
+.scroll-hint span { display: inline-block; color: var(--accent); animation: nudge 1.8s ease-in-out infinite; }
+
+@keyframes nudge { 50% { transform: translateY(5px); } }
+
+.guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.gcard { padding: 1.6rem; }
+
+.gcard .big {
+  margin: 0 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.gcard .big em { font-style: italic; color: var(--accent); }
+
+.gcard p { margin: 0; color: var(--mist); }
+
+.example {
+  margin: 1.5rem 0 0;
+  padding: 1.2rem 1.4rem;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: rgba(124, 196, 255, 0.07);
+  font-size: 1.05rem;
+}
+
+.example strong { font-weight: 500; color: var(--accent); }
+
+.sign-badge {
+  --el: var(--accent);
+  position: relative;
+  width: 100%;
+  max-width: min(24rem, 52vh);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 1px solid var(--accent-soft);
+  background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--el) 30%, transparent), transparent 68%);
+}
+
+.sign-badge::before {
+  content: "";
+  position: absolute;
+  inset: 7%;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--el) 55%, transparent);
+  animation: spin 80s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.sign-badge .bg {
+  display: block;
+  font-family: var(--glyph);
+  font-size: clamp(4.5rem, 10vw, 7.5rem);
+  line-height: 1;
+  color: var(--el);
+}
+
+.sign-badge .bn {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+}
+
+.sign-badge .bd { display: block; margin-top: 0.2rem; font-size: 0.85rem; color: var(--mist); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.2rem; }
+
+.chips span {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--faint);
+  font-size: 0.85rem;
+}
+
+.body { margin: 0 0 1.4rem; font-size: 1.05rem; }
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+.pair h4, .mini {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.pair p { margin: 0; color: var(--mist); }
+
+.fact {
+  margin: 1.4rem 0 0;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid var(--faint);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.95rem;
+}
+
+.fact b { font-weight: 500; color: var(--accent); margin-right: 0.35rem; }
+
+.wheel-wrap { width: 100%; }
+
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 1.2rem;
+  margin: 0 0 1.4rem;
+  padding: 0 0 1.4rem;
+  border-bottom: 1px solid var(--faint);
+  font-size: 0.9rem;
+  color: var(--mist);
+}
+
+.legend strong { font-weight: 500; color: var(--moon); }
+
+.legend .easy { color: var(--easy); }
+
+.legend .tense { color: var(--fire); }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+  gap: 0.9rem;
+}
+
+.pcard {
+  position: relative;
+  height: 12rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.pcard-in {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease);
+}
+
+.pcard.flipped .pcard-in { transform: rotateY(180deg); }
+
+.pface {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem 1.2rem;
+  border-radius: 18px;
+  border: 1px solid var(--faint);
+  background: rgba(255, 255, 255, 0.04);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: border-color 0.25s;
+}
+
+.pcard:hover .pface { border-color: var(--accent-soft); }
+
+.pface.back { transform: rotateY(180deg); background: #16325e; border-color: var(--accent-soft); }
+
+.pface .pg { font-family: var(--glyph); font-size: 1.7rem; line-height: 1; color: var(--accent); }
+
+.pface .pn { margin-top: 0.6rem; font-family: var(--serif); font-weight: 500; font-size: 1.5rem; line-height: 1.1; }
+
+.pface .ps { color: var(--mist); font-size: 0.92rem; }
+
+.pface .pl { margin-top: auto; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+
+.pface .pt { margin: 0 0 0.5rem; font-size: 0.95rem; line-height: 1.5; }
+
+.pface .pk { margin: 0; font-size: 0.82rem; line-height: 1.45; color: var(--mist); }
+
+.pface .rx-b {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 137, 107, 0.6);
+  color: var(--fire);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.tap { margin: 1rem 0 0; color: var(--mist); font-size: 0.88rem; }
+
+.htiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.htile {
+  min-height: 6.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.3rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--faint);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease);
+}
+
+.htile:hover { border-color: var(--accent-soft); }
+
+.htile.busy { background: rgba(124, 196, 255, 0.1); border-color: var(--accent-soft); }
+
+.htile.on { border-color: var(--accent); transform: translateY(-3px); }
+
+.htile .hn { font-family: var(--serif); font-weight: 500; font-size: 1.35rem; line-height: 1; }
+
+.htile .hl { font-size: 0.8rem; line-height: 1.3; color: var(--mist); }
+
+.htile .hp { min-height: 1.2em; font-family: var(--glyph); color: var(--accent); letter-spacing: 0.12em; }
+
+.hdetail { margin-top: 1.4rem; padding: 1.2rem 1.4rem; }
+
+.hdetail h4 { margin: 0 0 0.4rem; font-family: var(--serif); font-weight: 500; font-size: 1.4rem; }
+
+.hdetail p { margin: 0; color: var(--mist); }
+
+.mixcol h3, .col-title { margin: 0 0 0.3rem; font-family: var(--serif); font-weight: 500; font-size: 1.7rem; }
+
+.col-sub { margin: 0 0 1rem; color: var(--mist); font-size: 0.92rem; }
+
+.mix-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 0 0 1.2rem;
+}
+
+.mix-tiles.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.mt {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem 1rem 1.15rem;
+  border-radius: 14px;
+  border: 1px solid var(--faint);
+}
+
+.mt.lead-mt { border-color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); }
+
+.mt .pct { display: block; font-family: var(--serif); font-weight: 500; font-size: 2.2rem; line-height: 1; }
+
+.mt .nm { display: block; margin-top: 0.4rem; font-weight: 500; }
+
+.mt .ds { display: block; font-size: 0.8rem; color: var(--mist); line-height: 1.35; }
+
+.mt .fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 0;
+  background: var(--c);
+  transition: width 1.2s var(--ease) 0.3s;
+}
+
+.slide.in .mt .fill { width: var(--w); }
+
+.mix-text { margin: 0; font-size: 1.02rem; }
+
+.alist { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.aitem { padding: 1rem 1.2rem; }
+
+.aitem .ah { display: flex; align-items: baseline; gap: 0.6rem; font-size: 0.82rem; letter-spacing: 0.06em; color: var(--mist); }
+
+.aitem .ag { font-family: var(--glyph); color: var(--accent); letter-spacing: 0.05em; }
+
+.aitem p { margin: 0.35rem 0 0; }
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tile { padding: 1.35rem 1.4rem; transition: transform 0.35s var(--ease), border-color 0.35s; }
+
+.tile:hover { transform: translateY(-4px); border-color: var(--accent-soft); }
+
+.tile .label {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.tile .value {
+  margin: 0 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.tile.num .value { font-size: clamp(2rem, 3.3vw, 2.8rem); font-variant-numeric: lining-nums; }
+
+.tile p { margin: 0; color: var(--mist); font-size: 0.92rem; line-height: 1.55; }
+
+.end { text-align: center; }
+
+.end .slide-title, .end .slide-lead { margin-left: auto; margin-right: auto; }
+
+.end .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+
+.dots {
+  position: fixed;
+  top: 50%;
+  right: clamp(0.6rem, 2vw, 1.75rem);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transform: translateY(-50%);
+}
+
+.dots button {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s var(--ease);
+}
+
+.dots button::before { content: ""; position: absolute; inset: -7px; }
+
+.dots button.on { background: var(--accent); transform: scale(1.3); }
+
+.dots button::after {
+  content: attr(aria-label);
+  position: absolute;
+  top: 50%;
+  right: 1.4rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: var(--dusk);
+  color: var(--moon);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+}
+
+.dots button:hover::after, .dots button:focus-visible::after { opacity: 1; }
 
 .reveal .ring.outer { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 2.2s var(--ease) forwards; }
 
@@ -695,8 +979,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 .reveal .planet { opacity: 0; animation: drop 0.9s var(--ease) forwards; }
 
 .reveal .aspect-line { stroke-dasharray: 700; stroke-dashoffset: 700; animation: draw 1.6s var(--ease) forwards; }
-
-.reveal .results-hero > *, .reveal .focus { opacity: 0; animation: fade 1s var(--ease) forwards; }
 
 @keyframes draw { to { stroke-dashoffset: 0; } }
 
@@ -709,19 +991,38 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 @keyframes leave { to { opacity: 0; transform: translateY(-20px); } }
 
 @media (max-width: 860px) {
-  .split { grid-template-columns: 1fr; }
-  .wheel-wrap { position: static; }
-  .big-three { grid-template-columns: 1fr; }
-  .big-three > div, .big-three > div + div { padding: 1.1rem 0; border-left: 0; }
-  .big-three > div + div { border-top: 1px solid var(--faint); }
-  .row summary { grid-template-columns: 2rem minmax(0, 1fr); }
-  .row .row-side { grid-column: 2; text-align: left; }
-  .row-body { padding-left: 0; }
+  html.deck-on { scroll-snap-type: y proximity; }
+  .slide { padding: 5rem 1.5rem 3rem 1.25rem; }
+  .two, .two.even, .guide, .big-three, .tiles { grid-template-columns: minmax(0, 1fr); }
+  .two { gap: 2rem; }
+  .sign-badge { max-width: 14rem; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pcard { height: 13.5rem; }
+  .htiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mix-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pair, .legend { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+  .dots { gap: 0.5rem; right: 0.45rem; }
+  .dots button { width: 7px; height: 7px; }
+  .dots button::after { display: none; }
+}
+
+@media (max-width: 1180px) {
   .jump { display: none; }
 }
 
+@media (min-width: 861px) and (max-height: 820px) {
+  .slide { padding-top: 4.75rem; padding-bottom: 2rem; }
+  .slide-lead { margin-bottom: 1.25rem; }
+  .body { font-size: 1rem; margin-bottom: 1rem; }
+  .fact { margin-top: 1rem; padding: 0.8rem 1rem; }
+  .chips { margin-bottom: 0.9rem; }
+  .pcard { height: 11rem; }
+  .tile { padding: 1.1rem 1.2rem; }
+  .gcard { padding: 1.3rem; }
+}
+
 @media (max-width: 560px) {
-  .intro { padding-top: 0.5rem; padding-bottom: 1.25rem; }
+  .intro { padding-top: 4.5rem; padding-bottom: 1.25rem; }
   .intro-title { font-size: 2.1rem; margin-bottom: 0.75rem; }
   .intro-lead { font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.25rem; }
   .sentence { font-size: 1.3rem; line-height: 1.55; }
@@ -729,7 +1030,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
   #name { width: auto; flex: 1 1 8ch; min-width: 0; }
   #date { flex: 1 1 7.6em; }
   .at-wrap { flex: 1 1 auto; }
-  #time { flex: 1 1 6.4em; }
+  #time { flex: 1 1 5.4em; }
   .place-wrap { flex: 1 1 10ch; min-width: 0; }
   .form-note { margin: 0.5rem 0; }
   .form-row { gap: 0.9rem 1.25rem; }
@@ -746,7 +1047,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal *, .intro.leaving { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; transform: none !important; }
-  .bar-fill { transition: none; }
+  .sign-badge::before, .scroll-hint span { animation: none; }
+  .pcard-in, .mt .fill { transition: none; }
 }
 </style>
 </head>
@@ -755,14 +1057,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
 
   <header class="top">
     <a class="wordmark" href="#intro">Under this sky</a>
-    <nav class="jump" id="jump" hidden aria-label="Chart sections">
-      <a href="#wheel-section">Wheel</a>
-      <a href="#planets">Planets</a>
-      <a href="#houses">Houses</a>
-      <a href="#balance">Balance</a>
-      <a href="#aspects">Aspects</a>
-      <a href="#more">More</a>
-    </nav>
+    <div class="top-right">
+      <nav class="jump" id="jump" hidden aria-label="Chart sections"></nav>
+      <span class="counter" id="counter" hidden></span>
+    </div>
   </header>
 
   <main>
@@ -777,8 +1075,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
         </div>
         <div class="line">
           <span>I was born on</span>
-          <input type="date" id="date" name="date" aria-label="Date of birth" min="1900-01-01" max="2100-12-31" required>
-          <span class="at-wrap"><span>at</span> <input type="time" id="time" name="time" aria-label="Time of birth"></span>
+          <input type="text" id="date" name="date" inputmode="numeric" autocomplete="bday" placeholder="mm/dd/yyyy" aria-label="Date of birth, month day year" maxlength="20" required>
+          <span class="at-wrap"><span>at</span> <input type="text" id="time" name="time" autocomplete="off" placeholder="hh:mm am" aria-label="Time of birth" maxlength="12"></span>
         </div>
         <div class="line line-place">
           <span>in</span>
@@ -808,66 +1106,112 @@ input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.75; cursor: p
       </form>
     </section>
 
-    <section id="results" class="results" hidden>
-      <div class="results-hero">
-        <p class="born" id="born"></p>
-        <h2 class="headline" id="headline"></h2>
-        <div class="big-three" id="big-three"></div>
-      </div>
-
-      <section id="wheel-section" class="split">
-        <div class="wheel-wrap">
-          <svg id="wheel" viewBox="-16 -16 672 672" role="img" aria-labelledby="wheel-title">
-            <title id="wheel-title">Natal chart wheel</title>
-          </svg>
-          <p class="wheel-hint">Tap a planet, sign or house on the wheel to read it.</p>
-        </div>
-        <aside class="focus" id="focus" aria-live="polite"></aside>
-      </section>
-
-      <section id="planets" class="block">
-        <h3 class="block-title">Where every planet stood</h3>
-        <p class="block-lead">The Sun, Moon and rising sign are the headline. These are the rest of the story, from the fast personal planets that are specific to you to the slow outer ones you share with your generation.</p>
-        <div class="rows" id="planet-rows"></div>
-      </section>
-
-      <section id="houses" class="block">
-        <h3 class="block-title">The twelve houses</h3>
-        <p class="block-lead" id="houses-lead"></p>
-        <div class="angles" id="angles"></div>
-        <div class="rows" id="house-rows"></div>
-      </section>
-
-      <section id="balance" class="block">
-        <h3 class="block-title">Your balance</h3>
-        <p class="block-lead">Count the signs your planets fall in and a pattern appears. The elements describe your temperament. The modalities describe how you move through things.</p>
-        <div class="balance-grid">
-          <div id="element-balance"></div>
-          <div id="modality-balance"></div>
+    <div id="results" class="deck" hidden>
+      <section class="slide hero" id="s-hello" data-label="Hello" aria-labelledby="headline">
+        <div class="slide-in">
+          <p class="kicker" id="born"></p>
+          <h2 class="slide-title" id="headline"></h2>
+          <div class="big-three" id="big-three"></div>
+          <p class="scroll-hint"><span aria-hidden="true">&darr;</span> Scroll to flip through your chart</p>
         </div>
       </section>
 
-      <section id="aspects" class="block">
-        <h3 class="block-title">How your planets talk to each other</h3>
-        <p class="block-lead">Aspects are the angles between planets. Some planets in your chart cooperate, some fight, and both are useful to know about.</p>
-        <div class="rows" id="aspect-rows"></div>
-      </section>
-
-      <section id="more" class="block">
-        <h3 class="block-title">Beyond the big three</h3>
-        <div class="more-grid" id="more-grid"></div>
-      </section>
-
-      <footer class="results-footer">
-        <div class="actions">
-          <button type="button" class="ghost" id="copy">Copy my chart summary</button>
-          <button type="button" class="ghost" id="share">Copy a link to this chart</button>
-          <button type="button" class="ghost" id="restart">Draw another chart</button>
+      <section class="slide" id="s-basics" data-label="The basics" aria-labelledby="basics-title">
+        <div class="slide-in">
+          <p class="kicker">New to this? Start here</p>
+          <h2 class="slide-title" id="basics-title">A birth chart is a snapshot of the sky the moment you were born.</h2>
+          <p class="slide-lead">It only takes three ideas to read one.</p>
+          <div class="guide">
+            <div class="gcard panel"><p class="big">Planets are the <em>what</em></p><p>Each one stands for a part of you. Venus is how you love, Mars is your drive, Mercury is how you think.</p></div>
+            <div class="gcard panel"><p class="big">Signs are the <em>how</em></p><p>The sign a planet sits in gives it a style. Venus in a bold sign loves boldly. Venus in a careful sign loves carefully.</p></div>
+            <div class="gcard panel"><p class="big">Houses are the <em>where</em></p><p>The chart is split into 12 areas of life, like home, career and friends. A planet's house is where its energy shows up.</p></div>
+          </div>
+          <p class="example" id="example"></p>
         </div>
-        <p class="method">Positions are computed in your browser from orbital elements, accurate to about a degree, with whole sign houses and the tropical zodiac. Birthplaces are looked up through Open-Meteo's geocoding service. Nothing you enter is stored anywhere.</p>
-      </footer>
-    </section>
+      </section>
+
+      <section class="slide" id="s-sun" data-label="Your Sun" aria-label="Your Sun sign"><div class="slide-in" id="sun-slide"></div></section>
+      <section class="slide" id="s-moon" data-label="Your Moon" aria-label="Your Moon sign"><div class="slide-in" id="moon-slide"></div></section>
+      <section class="slide" id="s-rising" data-label="Your rising" aria-label="Your rising sign"><div class="slide-in" id="rising-slide"></div></section>
+
+      <section class="slide" id="s-wheel" data-label="Your wheel" aria-labelledby="wheel-heading">
+        <div class="slide-in two">
+          <div class="wheel-wrap" id="wheel-wrap">
+            <svg id="wheel" viewBox="-16 -16 672 672" role="group" aria-label="Your chart wheel. Select a planet, sign or house to read about it."></svg>
+          </div>
+          <div>
+            <p class="kicker">Your chart wheel</p>
+            <h2 class="slide-title" id="wheel-heading">This is your whole sky in one picture.</h2>
+            <div class="legend">
+              <span><strong>Outer ring</strong> the 12 signs</span>
+              <span><strong>Numbers</strong> the 12 areas of life</span>
+              <span><strong>Symbols</strong> your planets</span>
+              <span><strong>Lines</strong> <span class="easy">green get along</span>, <span class="tense">orange clash</span></span>
+            </div>
+            <div class="focus" id="focus" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="s-planets" data-label="Your planets" aria-labelledby="planets-title">
+        <div class="slide-in">
+          <p class="kicker">The rest of your planets</p>
+          <h2 class="slide-title" id="planets-title">Every planet runs a different part of your life.</h2>
+          <div class="cards" id="cards"></div>
+          <p class="tap">Tap a card to flip it.</p>
+        </div>
+      </section>
+
+      <section class="slide" id="s-houses" data-label="Life areas" aria-labelledby="houses-title"><div class="slide-in" id="houses-slide"></div></section>
+
+      <section class="slide" id="s-mix" data-label="Your mix" aria-labelledby="mix-title">
+        <div class="slide-in">
+          <p class="kicker">Your mix</p>
+          <h2 class="slide-title" id="mix-title">What you're made of.</h2>
+          <div class="two even" id="mix"></div>
+        </div>
+      </section>
+
+      <section class="slide" id="s-links" data-label="Connections" aria-labelledby="links-title">
+        <div class="slide-in">
+          <p class="kicker">How your planets get along</p>
+          <h2 class="slide-title" id="links-title">Some parts of you team up. Some push back.</h2>
+          <div class="two even" id="links"></div>
+        </div>
+      </section>
+
+      <section class="slide" id="s-facts" data-label="Fun facts" aria-labelledby="facts-title">
+        <div class="slide-in">
+          <p class="kicker">Things your horoscope never told you</p>
+          <h2 class="slide-title" id="facts-title">The sky you arrived under.</h2>
+          <div class="tiles" id="facts"></div>
+        </div>
+      </section>
+
+      <section class="slide" id="s-numbers" data-label="By the numbers" aria-labelledby="numbers-title">
+        <div class="slide-in">
+          <p class="kicker">You, by the numbers</p>
+          <h2 class="slide-title" id="numbers-title">You've been busy.</h2>
+          <div class="tiles" id="numbers"></div>
+        </div>
+      </section>
+
+      <section class="slide" id="s-end" data-label="Share" aria-labelledby="end-title">
+        <div class="slide-in end">
+          <p class="kicker">That's the tour</p>
+          <h2 class="slide-title" id="end-title"></h2>
+          <p class="slide-lead" id="end-lead"></p>
+          <div class="actions">
+            <button type="button" class="ghost" id="copy">Copy my chart summary</button>
+            <button type="button" class="ghost" id="share">Copy a link to this chart</button>
+            <button type="button" class="ghost" id="restart">Draw another chart</button>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <nav class="dots" id="dots" hidden aria-label="Chart slides"></nav>
 
 <script>
 const SIGNS = [
@@ -1018,10 +1362,10 @@ const SIGNS = [
 ];
 
 const ELEMENTS = {
-  Fire: { color: "#e2825f", text: "Fire signs run on instinct, enthusiasm and the need to act. Energy comes first, explanation later." },
-  Earth: { color: "#9cb98a", text: "Earth signs trust what they can build, hold and measure. Results matter more than ideas." },
-  Air: { color: "#9ec6ea", text: "Air signs live in ideas, language and connection. Understanding something is a way of loving it." },
-  Water: { color: "#9a93e0", text: "Water signs feel first and sort it out after. Emotion is information, and intuition is a sense." }
+  Fire: { color: "#f2896b", text: "Fire signs run on instinct, enthusiasm and the need to act. Energy comes first, explanation later." },
+  Earth: { color: "#9bd3a0", text: "Earth signs trust what they can build, hold and measure. Results matter more than ideas." },
+  Air: { color: "#cfe3ff", text: "Air signs live in ideas, language and connection. Understanding something is a way of loving it." },
+  Water: { color: "#5fd0c8", text: "Water signs feel first and sort it out after. Emotion is information, and intuition is a sense." }
 };
 
 const MODALITIES = {
@@ -1143,6 +1487,71 @@ const PLANETARY_DAYS = [
   { day: "Friday", planet: "Venus", text: "a day for love, beauty and pleasure" },
   { day: "Saturday", planet: "Saturn", text: "a day for discipline, patience and long-term work" }
 ];
+
+const PLAIN = {
+  Sun: { label: "Who you are", noun: "sense of self", you: "You shine" },
+  Moon: { label: "How you feel", noun: "emotions", you: "You feel things" },
+  Mercury: { label: "How you think and talk", noun: "mind", you: "You think and talk" },
+  Venus: { label: "How you love", noun: "love life", you: "You love" },
+  Mars: { label: "How you chase what you want", noun: "drive", you: "You go after what you want" },
+  Jupiter: { label: "Where you get lucky", noun: "optimism", you: "You grow and find luck" },
+  Saturn: { label: "Where you work hardest", noun: "sense of duty", you: "You build and hold the line" },
+  Uranus: { label: "Where you rebel", noun: "independent streak", you: "You break the rules" },
+  Neptune: { label: "Where you dream", noun: "imagination", you: "You dream" },
+  Pluto: { label: "Where you transform", noun: "inner power", you: "You change and rebuild" },
+  NorthNode: { label: "Where you're headed", noun: "life direction", you: "You're learning to move" }
+};
+
+const HOUSE_SHORT = [
+  "You", "Money", "Communication", "Home and family", "Fun and romance", "Work and health",
+  "Partners", "Intimacy and change", "Travel and beliefs", "Career", "Friends", "Inner world"
+];
+
+const ELEMENT_PLAIN = {
+  Fire: "energy and action",
+  Earth: "practical and grounded",
+  Air: "ideas and talking",
+  Water: "feelings and intuition"
+};
+
+const MODE_PLAIN = {
+  Cardinal: { name: "Starter", text: "You like to get things going and take the lead." },
+  Fixed: { name: "Keeper", text: "Once you commit, you see it through." },
+  Mutable: { name: "Adapter", text: "You go with the flow and adjust fast." }
+};
+
+const SIGN_FACTS = [
+  "The zodiac year starts with Aries at the March equinox, the day when daytime and nighttime are almost exactly equal.",
+  "The Taurus constellation holds the Pleiades, the star cluster on the Subaru logo. Subaru is the Japanese name for it.",
+  "The two brightest stars in Gemini are named Castor and Pollux, after the twin brothers of Greek myth.",
+  "The Tropic of Cancer got its name because the Sun sat in Cancer at the June solstice when the line was named.",
+  "Leo's brightest star, Regulus, gets its name from the Latin for \"little king.\"",
+  "Virgo is the biggest zodiac constellation and the second biggest in the entire sky.",
+  "Libra is the only zodiac sign shown as an object instead of a living creature.",
+  "Scorpio's red heart star, Antares, has a name that means \"rival of Mars\" because of its color.",
+  "When you look toward Sagittarius, you're looking toward the center of the Milky Way.",
+  "The Tropic of Capricorn is named for this sign, which held the Sun at the December solstice.",
+  "The 1960s hit \"Aquarius\" from the musical Hair is about this sign and its so-called new age.",
+  "The point where the zodiac officially begins, the spring equinox, currently sits among the stars of Pisces."
+];
+
+const CONSTELLATIONS = [
+  { name: "Aries", sign: "Aries", from: 29.1 },
+  { name: "Taurus", sign: "Taurus", from: 53.5 },
+  { name: "Gemini", sign: "Gemini", from: 90.4 },
+  { name: "Cancer", sign: "Cancer", from: 118.3 },
+  { name: "Leo", sign: "Leo", from: 138.2 },
+  { name: "Virgo", sign: "Virgo", from: 174.2 },
+  { name: "Libra", sign: "Libra", from: 218.1 },
+  { name: "Scorpius", sign: "Scorpio", from: 241.0 },
+  { name: "Ophiuchus", sign: null, from: 248.0 },
+  { name: "Sagittarius", sign: "Sagittarius", from: 266.3 },
+  { name: "Capricornus", sign: "Capricorn", from: 299.7 },
+  { name: "Aquarius", sign: "Aquarius", from: 327.9 },
+  { name: "Pisces", sign: "Pisces", from: 351.6 }
+];
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const ASTRO = (() => {
   const RAD = Math.PI / 180;
@@ -1342,6 +1751,16 @@ const ASTRO = (() => {
     return { bodies, obliquity: now.obliquity, elongation: now.sunMoonElongation };
   }
 
+  function bodyLongitude(jd, key) {
+    const d = jd - 2451543.5;
+    const sun = sunPosition(d);
+    if (key === "Sun") return sun.lon;
+    const Mj = norm(ELEMENTS.Jupiter(d).M), Ms = norm(ELEMENTS.Saturn(d).M), Mu = norm(ELEMENTS.Uranus(d).M);
+    const h = heliocentric(ELEMENTS[key](d));
+    perturb(key, h, Mj, Ms, Mu);
+    return geocentric(h, sun);
+  }
+
   function angles(jd, lat, lon, eps) {
     const gmst = norm(280.46061837 + 360.98564736629 * (jd - 2451545.0));
     const ramc = norm(gmst + lon);
@@ -1399,7 +1818,7 @@ const ASTRO = (() => {
     return { year, animal, element, yin };
   }
 
-  return { julianDay, positions, angles, signOf, formatDegree, aspects, moonPhase, chineseYear, norm };
+  return { julianDay, positions, bodyLongitude, angles, signOf, formatDegree, aspects, moonPhase, chineseYear, norm };
 })();
 
 (() => {
@@ -1443,7 +1862,7 @@ const ASTRO = (() => {
         const tw = reducedMotion ? 0.75 : 0.55 + 0.45 * Math.sin(t * s.speed + s.phase);
         ctx.beginPath();
         ctx.arc(s.x + px * s.depth, s.y + py * s.depth, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = s.warm ? `rgba(236, 203, 134, ${tw * 0.5})` : `rgba(246, 236, 243, ${tw * 0.45})`;
+        ctx.fillStyle = s.warm ? `rgba(124, 196, 255, ${tw * 0.55})` : `rgba(235, 243, 255, ${tw * 0.5})`;
         ctx.fill();
       }
       t += 0.016;
@@ -1765,7 +2184,7 @@ const ASTRO = (() => {
     const sunDecan = ASTRO.signOf(bodies.Sun.lon);
 
     return {
-      input, jd, timeKnown, ang, ascSign, placements, houses, elements, modalities,
+      input, jd, utcMs, timeKnown, ang, ascSign, placements, houses, elements, modalities,
       aspects: ASTRO.aspects(bodies, ASPECTS, PLANET_KEYS),
       phase: ASTRO.moonPhase(pos.elongation), elongation: pos.elongation,
       chinese: ASTRO.chineseYear(y, m, d, LUNAR_NEW_YEAR),
@@ -1896,7 +2315,7 @@ const ASTRO = (() => {
       if (text != null) e.textContent = text;
       return e;
     };
-    svg.querySelectorAll(":scope > *:not(title)").forEach(n => n.remove());
+    svg.replaceChildren();
 
     const R_OUT = 300, R_SIGN = 258, R_HOUSE = 232, R_PLANET = 196, R_ASPECT = 150;
 
@@ -1989,146 +2408,464 @@ const ASTRO = (() => {
     svg.appendChild(planetsG);
   }
 
-  function renderHero() {
-    const sun = chart.placements.Sun, moon = chart.placements.Moon;
-    const asc = chart.timeKnown ? SIGNS[chart.ascSign] : null;
-    const name = chart.input.name;
-    const where = chart.input.placeLabel;
-    $("born").textContent = `Born ${chart.dateLabel}${chart.timeLabel ? ` at ${chart.timeLabel}` : ""} in ${where}`;
-    $("headline").textContent = asc
-      ? `${name}, you were born under ${an(sun.sign.name)} ${sun.sign.name} Sun, ${an(moon.sign.name)} ${moon.sign.name} Moon, with ${asc.name} rising.`
-      : `${name}, you were born under ${an(sun.sign.name)} ${sun.sign.name} Sun and ${an(moon.sign.name)} ${moon.sign.name} Moon.`;
-    const col = (role, sign, lon, extra) => `
-      <div>
-        <p class="role">${role}</p>
-        <p class="sign"><span class="glyph">${sign.glyph}</span>${sign.name}</p>
-        <p class="deg">${ASTRO.formatDegree(lon)}${extra ? ` \u00B7 ${extra}` : ""}</p>
-      </div>`;
-    $("big-three").innerHTML =
-      col("Sun, who you are", sun.sign, sun.lon, sun.sign.keywords.join(", ")) +
-      col("Moon, what you need", moon.sign, moon.lon, moon.sign.keywords.join(", ")) +
-      (asc
-        ? col("Rising, how you come across", asc, chart.ang.asc, asc.keywords.join(", "))
-        : `<div><p class="role">Rising, how you come across</p><p class="sign">Unknown</p><p class="deg">Add a birth time to find it</p></div>`);
+  const pad = n => String(n).padStart(2, "0");
+  const YEAR_MS = 365.2422 * 86400000;
+  const fmtMonth = date => `${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+  const jdToDate = jd => new Date((jd - 2440587.5) * 86400000);
+  const dateToJd = ms => ms / 86400000 + 2440587.5;
+  const signedGap = (a, b) => ((a - b + 540) % 360) - 180;
+
+  function monthIndex(word) {
+    if (word.length < 3) return 0;
+    return MONTHS.findIndex(m => m.toLowerCase().startsWith(word.slice(0, 3))) + 1;
   }
 
-  function row(glyph, title, sub, side, body, attrs) {
-    return `<details class="row"${attrs || ""}>
-      <summary>
-        <span class="row-glyph">${glyph}</span>
-        <span><span class="row-title">${title}</span><span class="row-sub">${sub}</span></span>
-        <span class="row-side">${side}</span>
-      </summary>
-      <div class="row-body">${body}</div>
-    </details>`;
+  function parseDate(str) {
+    const s = str.trim().toLowerCase().replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+    let y, m, d, mm;
+    if ((mm = s.match(/^(\d{4})[-/ ](\d{1,2})[-/ ](\d{1,2})$/))) [y, m, d] = [+mm[1], +mm[2], +mm[3]];
+    else if ((mm = s.match(/^(\d{1,2})[-/ ](\d{1,2})[-/ ](\d{2}|\d{4})$/))) [m, d, y] = [+mm[1], +mm[2], +mm[3]];
+    else if ((mm = s.match(/^(\d{2})(\d{2})(\d{4})$/))) [m, d, y] = [+mm[1], +mm[2], +mm[3]];
+    else if ((mm = s.match(/^([a-z]+) (\d{1,2})(?:st|nd|rd|th)? (\d{4})$/))) [m, d, y] = [monthIndex(mm[1]), +mm[2], +mm[3]];
+    else if ((mm = s.match(/^(\d{1,2})(?:st|nd|rd|th)? ([a-z]+) (\d{4})$/))) [d, m, y] = [+mm[1], monthIndex(mm[2]), +mm[3]];
+    else return null;
+    if (y < 100) y += y > new Date().getFullYear() % 100 ? 1900 : 2000;
+    if (!m || m > 12 || y < 1900 || y > 2100) return null;
+    const check = new Date(Date.UTC(y, m - 1, d));
+    if (check.getUTCMonth() !== m - 1 || check.getUTCDate() !== d) return null;
+    return `${y}-${pad(m)}-${pad(d)}`;
   }
 
-  function renderPlanets() {
-    $("planet-rows").innerHTML = PLANETS.map(p => {
-      const pl = chart.placements[p.key];
-      const side = `${ASTRO.formatDegree(pl.lon)}${pl.house ? ` \u00B7 ${houseLabel(pl.house)}` : ""}${pl.retrograde ? ` \u00B7 <span class="rx">Rx</span>` : ""}`;
-      const body = `<p>${placementReading(p.key)}</p>${pl.house ? `<p>It falls in your ${houseLabel(pl.house)}, the house of ${HOUSES[pl.house - 1].theme}.</p>` : ""}<p class="note">${TIER_NOTES[p.tier]}</p>`;
-      return row(p.glyph, placementTitle(p.key), p.domain, side, body, ` data-planet-row="${p.key}"`);
-    }).join("");
-    if (chart.timeKnown) {
-      const s = SIGNS[chart.ascSign];
-      $("planet-rows").insertAdjacentHTML("afterbegin", row(s.glyph, `${s.name} rising`, "the sign on your eastern horizon, how the world meets you", ASTRO.formatDegree(chart.ang.asc), `<p>${s.rising}</p>`));
+  function parseTime(str) {
+    const s = str.toLowerCase().replace(/[.\s]/g, "");
+    if (s === "noon") return "12:00";
+    if (s === "midnight") return "00:00";
+    const m = s.match(/^(\d{1,2})(?::?(\d{2}))?(am|pm|a|p)?$/);
+    if (!m) return null;
+    let h = +m[1];
+    const min = m[2] ? +m[2] : 0;
+    if (min > 59) return null;
+    if (m[3]) {
+      if (h < 1 || h > 12) return null;
+      if (m[3][0] === "p" && h !== 12) h += 12;
+      if (m[3][0] === "a" && h === 12) h = 0;
+    } else if (h > 23) return null;
+    return `${pad(h)}:${pad(min)}`;
+  }
+
+  function showDate(iso) {
+    const [y, m, d] = iso.split("-");
+    return `${m}/${d}/${y}`;
+  }
+
+  function showTime(hhmm) {
+    const [h, m] = hhmm.split(":").map(Number);
+    return `${h % 12 || 12}:${pad(m)} ${h < 12 ? "AM" : "PM"}`;
+  }
+
+  function wireDateTime() {
+    const date = $("date"), time = $("time");
+    date.addEventListener("input", e => {
+      if (e.inputType && e.inputType.startsWith("delete")) return;
+      const v = date.value;
+      let mm;
+      if (/^\d{3,8}$/.test(v) && +v.slice(0, 2) <= 12) {
+        date.value = v.slice(0, 2) + "/" + v.slice(2, 4) + (v.length > 4 ? "/" + v.slice(4) : "");
+      } else if ((mm = v.match(/^(\d{1,2}\/)(\d{2})(\d{1,4})$/))) {
+        date.value = `${mm[1]}${mm[2]}/${mm[3]}`;
+      }
+    });
+    date.addEventListener("blur", () => {
+      if (!date.value.trim()) return;
+      const iso = parseDate(date.value);
+      if (iso) { date.value = showDate(iso); date.removeAttribute("aria-invalid"); }
+      else date.setAttribute("aria-invalid", "true");
+    });
+    time.addEventListener("blur", () => {
+      if (!time.value.trim()) return;
+      const t = parseTime(time.value);
+      if (t) { time.value = showTime(t); time.removeAttribute("aria-invalid"); }
+      else time.setAttribute("aria-invalid", "true");
+    });
+  }
+
+  function altitude(lon, jd, lat, lng) {
+    const eps = 23.4393 * RAD;
+    const l = lon * RAD;
+    const ra = Math.atan2(Math.cos(eps) * Math.sin(l), Math.cos(l));
+    const dec = Math.asin(Math.sin(eps) * Math.sin(l));
+    const lst = ASTRO.norm(280.46061837 + 360.98564736629 * (jd - 2451545) + lng) * RAD;
+    const ha = lst - ra;
+    return Math.asin(Math.sin(lat * RAD) * Math.sin(dec) + Math.cos(lat * RAD) * Math.cos(dec) * Math.cos(ha)) / RAD;
+  }
+
+  function findReturn(key, natal, fromJd, toJd) {
+    let prev = signedGap(ASTRO.bodyLongitude(fromJd, key), natal);
+    for (let jd = fromJd + 1; jd <= toJd; jd += 1) {
+      const gap = signedGap(ASTRO.bodyLongitude(jd, key), natal);
+      if (prev < 0 && gap >= 0 && gap < 5) return jd;
+      prev = gap;
     }
+    return null;
+  }
+
+  function countRetrogrades(key, fromJd, toJd) {
+    let count = 0, prevLon = ASTRO.bodyLongitude(fromJd, key), wasBack = null;
+    for (let jd = fromJd + 1; jd <= toJd; jd += 1) {
+      const lon = ASTRO.bodyLongitude(jd, key);
+      const back = signedGap(lon, prevLon) < 0;
+      if (back && wasBack === false) count++;
+      wasBack = back;
+      prevLon = lon;
+    }
+    return count;
+  }
+
+  function nextFullMoon(fromJd) {
+    let prev = ASTRO.positions(fromJd).elongation;
+    for (let jd = fromJd + 0.25; jd < fromJd + 31; jd += 0.25) {
+      const e = ASTRO.positions(jd).elongation;
+      if (prev < 180 && e >= 180) return jd;
+      prev = e;
+    }
+    return null;
+  }
+
+  function constellationOf(lon, year) {
+    const j2000 = ASTRO.norm(lon - 0.0139696 * (year - 2000));
+    let found = CONSTELLATIONS[CONSTELLATIONS.length - 1];
+    for (const c of CONSTELLATIONS) if (j2000 >= c.from) found = c;
+    if (j2000 < CONSTELLATIONS[0].from) found = CONSTELLATIONS[CONSTELLATIONS.length - 1];
+    return found;
+  }
+
+  function computeExtras() {
+    const now = Date.now();
+    const nowJd = dateToJd(now);
+    const birthJd = chart.jd;
+    const lived = Math.max(0, now - chart.utcMs);
+    const days = Math.floor(lived / 86400000);
+    const years = lived / YEAR_MS;
+    const natal = chart.placements;
+    const saturnJd = findReturn("Saturn", natal.Saturn.lon, birthJd + 25 * 365.25, birthJd + 31.5 * 365.25);
+    const jupiterJd = findReturn("Jupiter", natal.Jupiter.lon, Math.max(nowJd, birthJd + 300), Math.max(nowJd, birthJd + 300) + 13 * 365.25);
+    const fullJd = nextFullMoon(nowJd);
+    const [y, m, d] = chart.input.date.split("-").map(Number);
+    const today = new Date();
+    let next = new Date(today.getFullYear(), m - 1, d);
+    const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    if (next < startToday) next = new Date(today.getFullYear() + 1, m - 1, d);
+    return {
+      days, years,
+      miles: years * 584e6,
+      fullMoons: Math.floor(days / 29.5306),
+      mercury: lived > 0 ? countRetrogrades("Mercury", birthJd, Math.min(nowJd, birthJd + 120 * 365.25)) : 0,
+      saturn: saturnJd ? { date: jdToDate(saturnJd), age: Math.floor((saturnJd - birthJd) / 365.2422), past: saturnJd < nowJd } : null,
+      jupiter: jupiterJd ? jdToDate(jupiterJd) : null,
+      fullMoon: fullJd ? jdToDate(fullJd) : null,
+      birthdayIn: Math.round((next - startToday) / 86400000),
+      constellation: constellationOf(natal.Sun.lon, y)
+    };
+  }
+
+  function bigThreeCard(role, sign, what) {
+    return `<div class="b3 panel">
+      <p class="role">${role}</p>
+      <p class="sign"><span class="glyph-t">${sign.glyph}</span>${sign.name}</p>
+      <p class="what">${what}</p>
+    </div>`;
+  }
+
+  function renderHero() {
+    const sun = chart.placements.Sun.sign, moon = chart.placements.Moon.sign;
+    const asc = chart.timeKnown ? SIGNS[chart.ascSign] : null;
+    $("born").textContent = `${chart.dateLabel}${chart.timeLabel ? ` \u00B7 ${chart.timeLabel}` : ""} \u00B7 ${chart.input.placeLabel}`;
+    $("headline").textContent = asc
+      ? `${chart.input.name}, you're ${an(sun.name)} ${sun.name} Sun, ${an(moon.name)} ${moon.name} Moon and ${asc.name} rising.`
+      : `${chart.input.name}, you're ${an(sun.name)} ${sun.name} Sun with ${an(moon.name)} ${moon.name} Moon.`;
+    $("big-three").innerHTML =
+      bigThreeCard("Sun \u00B7 who you are", sun, `At your core: ${sun.keywords.join(", ")}.`) +
+      bigThreeCard("Moon \u00B7 how you feel", moon, `Emotionally: ${moon.keywords.join(", ")}.`) +
+      (asc
+        ? bigThreeCard("Rising \u00B7 first impression", asc, `People see you as ${asc.keywords.join(", ")}.`)
+        : `<div class="b3 panel"><p class="role">Rising \u00B7 first impression</p><p class="sign">Unknown</p><p class="what">Add a birth time to find it.</p></div>`);
+  }
+
+  function renderExample() {
+    const v = chart.placements.Venus;
+    const where = v.house ? ` in your ${ordinal(v.house)} house` : "";
+    const area = v.house ? `, and it shows up most in the area of ${HOUSE_SHORT[v.house - 1].toLowerCase()}` : "";
+    $("example").innerHTML = `<strong>From your chart:</strong> Venus is in ${v.sign.name}${where}. In plain English, you love ${v.sign.style}${area}.`;
+  }
+
+  function badge(sign) {
+    return `<div class="sign-badge" style="--el:${ELEMENTS[sign.element].color}">
+      <div><span class="bg" aria-hidden="true">${sign.glyph}</span><span class="bn">${sign.name}</span><span class="bd">${sign.symbol} \u00B7 ${sign.dates}</span></div>
+    </div>`;
+  }
+
+  function signChips(sign) {
+    return `<div class="chips">${sign.keywords.map(k => `<span>${k}</span>`).join("")}<span>${sign.element}: ${ELEMENT_PLAIN[sign.element]}</span><span>Ruled by ${sign.ruler}</span></div>`;
+  }
+
+  function featureSlide(sign, kicker, title, lead, body, fact, extra) {
+    return `<div class="two">
+      ${badge(sign)}
+      <div>
+        <p class="kicker">${kicker}</p>
+        <h2 class="slide-title">${title}</h2>
+        <p class="slide-lead">${lead}</p>
+        ${signChips(sign)}
+        <p class="body">${body}${extra || ""}</p>
+        <div class="pair">
+          <div><h4>Superpowers</h4><p>${sign.strengths[0].toUpperCase() + sign.strengths.slice(1)}</p></div>
+          <div><h4>Watch out for</h4><p>${sign.shadow[0].toUpperCase() + sign.shadow.slice(1)}</p></div>
+        </div>
+        <p class="fact"><b>Did you know?</b>${fact}</p>
+      </div>
+    </div>`;
+  }
+
+  function renderBigThreeSlides() {
+    const sun = chart.placements.Sun, moon = chart.placements.Moon;
+    const sunHouse = sun.house ? ` Yours sits in your ${ordinal(sun.house)} house, so ${HOUSE_SHORT[sun.house - 1].toLowerCase()} is where you shine brightest.` : "";
+    $("sun-slide").innerHTML = featureSlide(sun.sign, "Your Sun sign", `${sun.sign.name} Sun`,
+      "This is the sign you already know. It's your core self: what drives you and who you're growing into.",
+      sun.sign.sun, SIGN_FACTS[sun.signIndex], sunHouse);
+    const phase = MOON_PHASES[chart.phase];
+    const lit = Math.round((1 - Math.cos(chart.elongation * RAD)) / 2 * 100);
+    $("moon-slide").innerHTML = featureSlide(moon.sign, "Your Moon sign", `${moon.sign.name} Moon`,
+      "Your Moon is your emotional side, the you that shows up at home, when you're tired, or with people you trust.",
+      moon.sign.moon, `The Moon was a ${phase.name.toLowerCase().replace(" moon", "")} moon when you were born, with ${lit}% of it lit up.`);
+    if (chart.timeKnown) {
+      const asc = SIGNS[chart.ascSign];
+      const desc = SIGNS[(chart.ascSign + 6) % 12];
+      $("rising-slide").innerHTML = featureSlide(asc, "Your rising sign", `${asc.name} rising`,
+        "Your rising sign was coming up over the horizon the moment you were born. It's your first impression, the vibe people get before they really know you.",
+        asc.rising, `Your rising sign changes about every two hours, so someone born on your exact birthday a few hours later can have a completely different one. Its opposite, ${desc.name}, hints at the kind of people you're drawn to.`);
+    } else {
+      $("rising-slide").innerHTML = `<div class="two">
+        <div class="sign-badge"><div><span class="bg" aria-hidden="true">?</span><span class="bn">Unknown</span><span class="bd">Needs a birth time</span></div></div>
+        <div>
+          <p class="kicker">Your rising sign</p>
+          <h2 class="slide-title">Your rising sign is still hiding.</h2>
+          <p class="slide-lead">Your rising sign is your first impression, the vibe people get before they know you. It changes about every two hours, so it needs your birth time.</p>
+          <p class="body">Your birth certificate usually lists it. Once you have it, draw your chart again to unlock your rising sign and your 12 life areas.</p>
+          <button type="button" class="ghost" data-restart>Add my birth time</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  function renderCards() {
+    $("cards").innerHTML = PLANETS.filter(p => p.key !== "Sun" && p.key !== "Moon").map(p => {
+      const pl = chart.placements[p.key];
+      const plain = PLAIN[p.key];
+      const name = p.label || p.key;
+      const extra = p.tier === "generational" ? " Everyone born within a few years of you shares this one." : "";
+      return `<button type="button" class="pcard" aria-pressed="false" aria-label="${name} in ${pl.sign.name}. ${plain.label}. Flip for meaning.">
+        <span class="pcard-in">
+          <span class="pface">
+            ${pl.retrograde ? `<span class="rx-b">Retrograde</span>` : ""}
+            <span class="pg" aria-hidden="true">${p.glyph}</span>
+            <span class="pn">${name}</span>
+            <span class="ps">in ${pl.sign.name}${pl.house ? ` \u00B7 ${ordinal(pl.house)} house` : ""}</span>
+            <span class="pl">${plain.label}</span>
+          </span>
+          <span class="pface back">
+            <span class="pt">${plain.you} ${pl.sign.style}.</span>
+            <span class="pk">Good at ${pl.sign.strengths}.${extra}${pl.retrograde ? " Retrograde means you work this out privately, in your own time." : ""}</span>
+          </span>
+        </span>
+      </button>`;
+    }).join("");
+  }
+
+  function houseDetail(n) {
+    const h = chart.houses[n - 1];
+    const here = h.planets.map(k => planetByKey[k].label || k);
+    const who = here.length
+      ? `${here.join(", ")} ${here.length > 1 ? "live" : "lives"} here, so this part of life gets a lot of your energy.`
+      : `No planets here, which is totally normal. You handle it ${h.sign.style}.`;
+    return `<h4>${ordinal(n)} house \u00B7 ${HOUSE_SHORT[n - 1]}</h4><p>${h.text} ${who}</p>`;
   }
 
   function renderHouses() {
+    const slot = $("houses-slide");
     if (!chart.timeKnown) {
-      $("houses-lead").textContent = "Houses depend on your birth time, because the whole wheel turns once a day. Add a time and this section fills in with where each part of life sits for you.";
-      $("angles").innerHTML = "";
-      $("house-rows").innerHTML = "";
+      slot.innerHTML = `<p class="kicker">Your 12 life areas</p>
+        <h2 class="slide-title" id="houses-title">Your life areas need a birth time.</h2>
+        <p class="slide-lead">The 12 areas of life (home, career, love, friends and the rest) spin around the chart once a day, so they depend on the exact time you were born. Add it to see which areas your planets light up.</p>
+        <button type="button" class="ghost" data-restart>Add my birth time</button>`;
       return;
     }
-    $("houses-lead").textContent = "If the planets are what, and the signs are how, the houses are where. Each one is a department of life, and the sign on its door describes how you run it. This chart uses whole sign houses, the oldest system: your rising sign is the whole first house, and each sign after it is the next.";
-    const a = chart.ang;
-    $("angles").innerHTML = [
-      ["Ascendant", a.asc, "rising, your approach"],
-      ["Descendant", a.desc, "setting, what you seek in others"],
-      ["Midheaven", a.mc, "highest point, your public role"],
-      ["Imum Coeli", a.ic, "lowest point, your private roots"]
-    ].map(([lab, lon, txt]) => `<div><strong>${SIGNS[ASTRO.signOf(lon).index].name} ${ASTRO.formatDegree(lon)}</strong>${lab}, ${txt}</div>`).join("");
-    $("house-rows").innerHTML = chart.houses.map(h => {
-      const here = h.planets.map(k => planetByKey[k].label || k);
-      return row(h.sign.glyph, `${ordinal(h.n)} house in ${h.sign.name}`, h.theme, here.length ? here.join(", ") : "empty",
-        `<p>${h.text}</p><p>${here.length ? `${here.join(", ")} ${here.length > 1 ? "sit" : "sits"} here. The sign on the door is ${h.sign.name}, so you handle these matters ${h.sign.style}.` : `No planets here, which is normal: ten planets across twelve houses leaves gaps. ${h.sign.name} on the door means you handle these matters ${h.sign.style}, and the house's ruler, ${h.sign.ruler}, carries its themes from where it sits in your chart.`}</p>`);
-    }).join("");
+    const busiest = chart.houses.filter(h => h.planets.length).sort((a, b) => b.planets.length - a.planets.length);
+    const top = busiest.slice(0, 2);
+    slot.innerHTML = `<div class="two">
+      <div>
+        <p class="kicker">Your 12 life areas</p>
+        <h2 class="slide-title" id="houses-title">Where your energy goes.</h2>
+        <p class="slide-lead">Your chart is split into 12 areas of life. The more planets an area has, the bigger a deal it tends to be for you. Yours lean toward <strong>${top.map(h => HOUSE_SHORT[h.n - 1].toLowerCase()).join("</strong> and <strong>")}</strong>.</p>
+        <div class="hdetail panel" id="hdetail" aria-live="polite">${houseDetail(top[0].n)}</div>
+      </div>
+      <div class="htiles">${chart.houses.map(h => `
+        <button type="button" class="htile${h.planets.length ? " busy" : ""}${h.n === top[0].n ? " on" : ""}" data-house="${h.n}" aria-label="${ordinal(h.n)} house, ${HOUSE_SHORT[h.n - 1]}">
+          <span class="hn">${h.n}</span>
+          <span class="hl">${HOUSE_SHORT[h.n - 1]}</span>
+          <span class="hp" aria-hidden="true">${h.planets.map(k => planetByKey[k].glyph).join(" ")}</span>
+        </button>`).join("")}
+      </div>
+    </div>`;
   }
 
-  function renderBalance() {
+  function renderMix() {
     const total = PLANET_KEYS.length + (chart.timeKnown ? 1 : 0);
-    const names = k => (planetByKey[k] ? planetByKey[k].glyph : "ASC");
-    const bars = (title, groups, order, colorOf, textOf) => {
-      const sorted = [...order].sort((a, b) => (groups[b] || []).length - (groups[a] || []).length);
-      const top = sorted[0], low = sorted[sorted.length - 1];
-      return `<div class="bars"><h4>${title}</h4>${order.map(k => {
-        const list = groups[k] || [];
-        return `<div class="bar"><div class="bar-head"><span>${k} <span style="color:var(--mist)">${list.length}</span></span><span>${list.map(names).join(" ")}</span></div><div class="bar-track"><div class="bar-fill" data-w="${(list.length / total) * 100}" style="background:${colorOf(k)}"></div></div></div>`;
-      }).join("")}<p class="bar-text">${textOf(top, low, groups)}</p></div>`;
-    };
-    $("element-balance").innerHTML = bars("Elements", chart.elements, ["Fire", "Earth", "Air", "Water"], k => ELEMENTS[k].color, (top, low, g) =>
-      `${top} leads. ${ELEMENTS[top].text}${(g[low] || []).length === 0 ? ` You have no planets in ${low} signs, which usually means ${low.toLowerCase()} qualities are something you admire in others, borrow from them, or have to build on purpose.` : ` ${low} is your quietest element, so its qualities take more deliberate effort.`}`);
-    $("modality-balance").innerHTML = bars("Modalities", chart.modalities, ["Cardinal", "Fixed", "Mutable"], () => "var(--gold)", (top, low) =>
-      `${top} leads. ${MODALITIES[top]} ${low} is your least represented mode: ${MODALITIES[low].split(". ")[0].toLowerCase()} is not your default move.`);
-    requestAnimationFrame(() => setTimeout(() => {
-      document.querySelectorAll(".bar-fill").forEach(b => { b.style.width = `${b.dataset.w}%`; });
-    }, 100));
+    const share = (groups, k) => Math.round(((groups[k] || []).length / total) * 100);
+    const els = ["Fire", "Earth", "Air", "Water"];
+    const modes = ["Cardinal", "Fixed", "Mutable"];
+    const topEl = [...els].sort((a, b) => share(chart.elements, b) - share(chart.elements, a))[0];
+    const lowEl = [...els].sort((a, b) => share(chart.elements, a) - share(chart.elements, b))[0];
+    const topMode = [...modes].sort((a, b) => share(chart.modalities, b) - share(chart.modalities, a))[0];
+    const tile = (k, pct, desc, color, isTop) =>
+      `<div class="mt${isTop ? " lead-mt" : ""}" style="--c:${color};--w:${pct}%"><span class="pct">${pct}%</span><span class="nm">${k}</span><span class="ds">${desc}</span><span class="fill"></span></div>`;
+    $("mix").innerHTML = `
+      <div class="mixcol">
+        <h3>Elements</h3>
+        <p class="col-sub">Your temperament</p>
+        <div class="mix-tiles">${els.map(k => tile(k, share(chart.elements, k), ELEMENT_PLAIN[k], ELEMENTS[k].color, k === topEl)).join("")}</div>
+        <p class="mix-text">You're mostly <strong>${topEl.toLowerCase()}</strong>. ${ELEMENTS[topEl].text} ${share(chart.elements, lowEl) === 0 ? `You have no ${lowEl.toLowerCase()} at all, so ${ELEMENT_PLAIN[lowEl]} is something you borrow from the people around you.` : `${lowEl} is your quietest element.`}</p>
+      </div>
+      <div class="mixcol">
+        <h3>Modes</h3>
+        <p class="col-sub">How you get things done</p>
+        <div class="mix-tiles three">${modes.map(k => tile(MODE_PLAIN[k].name, share(chart.modalities, k), k, "var(--accent)", k === topMode)).join("")}</div>
+        <p class="mix-text">You're a <strong>${MODE_PLAIN[topMode].name.toLowerCase()}</strong>. ${MODE_PLAIN[topMode].text}</p>
+      </div>`;
   }
 
-  function renderAspects() {
-    if (!chart.aspects.length) {
-      $("aspect-rows").innerHTML = `<p class="block-lead">No major aspects within orb, which is rare. Your planets act more independently than most.</p>`;
-      return;
+  function renderLinks() {
+    const item = as => {
+      const A = PLAIN[as.a].noun, B = PLAIN[as.b].noun;
+      const verb = as.aspect.tone === "easy" ? "work together easily" : as.aspect.tone === "fused" ? "are fused together, so one sets off the other" : "push against each other";
+      return `<div class="aitem panel">
+        <div class="ah"><span class="ag" aria-hidden="true">${planetByKey[as.a].glyph} ${as.aspect.glyph} ${planetByKey[as.b].glyph}</span>${as.a} and ${as.b}</div>
+        <p>Your ${A} and your ${B} ${verb}.</p>
+      </div>`;
+    };
+    const easy = chart.aspects.filter(a => a.aspect.tone !== "tense").slice(0, 3);
+    const tense = chart.aspects.filter(a => a.aspect.tone === "tense").slice(0, 3);
+    $("links").innerHTML = `
+      <div>
+        <p class="col-title">Natural talents</p>
+        <p class="col-sub">Parts of you that click without trying.</p>
+        <div class="alist">${easy.length ? easy.map(item).join("") : `<p class="col-sub">Your planets mostly work on their own, which makes you hard to predict.</p>`}</div>
+      </div>
+      <div>
+        <p class="col-title">Growing edges</p>
+        <p class="col-sub">Tension isn't bad. It's usually where people get the most driven.</p>
+        <div class="alist">${tense.length ? tense.map(item).join("") : `<p class="col-sub">Hardly any friction in your chart. Things come easily, so the challenge is staying motivated.</p>`}</div>
+      </div>`;
+  }
+
+  function tile(label, value, text, num) {
+    return `<div class="tile panel${num ? " num" : ""}"><p class="label">${label}</p><p class="value">${value}</p><p>${text}</p></div>`;
+  }
+
+  function count(to, decimals) {
+    return `<span class="count" data-to="${to}" data-dec="${decimals || 0}">${(decimals ? to.toFixed(decimals) : Math.round(to).toLocaleString())}</span>`;
+  }
+
+  function renderFacts(x) {
+    const sun = chart.placements.Sun;
+    const phase = MOON_PHASES[chart.phase];
+    const lit = Math.round((1 - Math.cos(chart.elongation * RAD)) / 2 * 100);
+    const ch = chart.chinese;
+    const animal = CHINESE_ANIMALS[ch.animal];
+    const elName = ["Wood", "Fire", "Earth", "Metal", "Water"][ch.element];
+    const city = chart.input.placeLabel.split(",")[0];
+    const c = x.constellation;
+    let first;
+    if (chart.timeKnown) {
+      const alt = altitude(sun.lon, chart.jd, chart.input.lat, chart.input.lon);
+      const up = PLANETS.filter(p => p.key !== "Sun" && p.key !== "NorthNode" && altitude(chart.placements[p.key].lon, chart.jd, chart.input.lat, chart.input.lon) > 0).map(p => p.key);
+      first = tile("Day or night",
+        alt > 0 ? "Day baby" : "Night baby",
+        `The Sun was ${Math.abs(Math.round(alt))}\u00B0 ${alt > 0 ? "above" : "below"} the horizon in ${city} when you arrived.${up.length ? ` Up in your sky: ${up.join(", ")}.` : ""}`);
+    } else {
+      const rx = PLANETS.filter(p => chart.placements[p.key].retrograde).map(p => p.key);
+      first = tile("Planets moving backward", `${rx.length} retrograde`, rx.length ? `${rx.join(", ")} ${rx.length > 1 ? "were" : "was"} retrograde, meaning ${rx.length > 1 ? "they looked" : "it looked"} like ${rx.length > 1 ? "they were" : "it was"} moving backward from Earth.` : "Every planet was moving forward when you were born, which is less common than you'd think.");
     }
-    $("aspect-rows").innerHTML = chart.aspects.map(as => {
-      const A = planetByKey[as.a], B = planetByKey[as.b];
-      const glyph = `${A.glyph}${as.aspect.glyph}${B.glyph}`;
-      const sub = `${as.aspect.name}, ${as.orb.toFixed(1)}\u00B0 from exact`;
-      const sentence = `Your ${A.domain.split(",")[0]} ${as.aspect.verb} your ${B.domain.split(",")[0]}.`;
-      return row(`<span style="font-size:0.95rem;letter-spacing:0.05em">${glyph}</span>`, `${as.a} ${as.aspect.name.toLowerCase()} ${as.b}`, sub, as.aspect.tone === "easy" ? "flowing" : as.aspect.tone === "tense" ? "challenging" : "blended",
-        `<p>${sentence} ${as.aspect.text}</p><p class="note">${as.a} is in ${chart.placements[as.a].sign.name} and ${as.b} is in ${chart.placements[as.b].sign.name}. ${as.orb < 2 ? "This aspect is close to exact, so it is one of the strongest features of your chart." : as.orb < 5 ? "A moderately tight aspect, clearly felt." : "A wide aspect, present but in the background."}</p>`);
-    }).join("");
+    const starText = c.sign === null
+      ? `Astronomers would say the Sun was in front of Ophiuchus, the "13th sign" astrology leaves out. Astrology follows the seasons, not the stars.`
+      : c.sign === sun.sign.name
+        ? `Astronomers would agree with your sign: the Sun really was in front of ${c.name}. That match is rarer than you'd think, since the stars and the signs have drifted about one sign apart.`
+        : `Astronomers would say the Sun was in front of ${c.name}, not ${sun.sign.name}. Astrology ties signs to the seasons, and over 2,000 years the stars have drifted about one sign over.`;
+    $("facts").innerHTML = [
+      first,
+      tile("The stars behind your Sun", c.name, starText),
+      tile("The Moon that night", `${moonIcon(chart.elongation)}${phase.name}`, `${lit}% lit. ${phase.text}`),
+      tile(`${sun.sign.name} trivia`, `${sun.sign.glyph} ${sun.sign.symbol}`, SIGN_FACTS[sun.signIndex]),
+      tile("Chinese zodiac", `${elName} ${animal.name}`, `${animal.text} The ${elName.toLowerCase()} element adds ${CHINESE_ELEMENTS[elName]}.`),
+      tile("Born on a", chart.day.day, `Every weekday is named for a planet, and ${chart.day.day} belongs to ${chart.day.planet}: ${chart.day.text}. Your birthstone is ${chart.birthstone.toLowerCase()}.`)
+    ].join("");
+  }
+
+  function renderNumbers(x) {
+    const billions = x.miles >= 1e9;
+    const sat = x.saturn
+      ? tile("Saturn return", fmtMonth(x.saturn.date), x.saturn.past
+        ? `Around age ${x.saturn.age}, Saturn came back to where it was when you were born. Astrologers call it a cosmic coming of age, and it lines up with a lot of late-twenties life changes.`
+        : `Around age ${x.saturn.age}, Saturn comes back to where it was when you were born. Astrologers call it a cosmic coming of age, the big grown-up checkpoint of your late twenties.`)
+      : tile("Saturn return", "Around 29", "Saturn takes about 29 years to come back to where it was when you were born, a checkpoint astrologers call your Saturn return.");
+    $("numbers").innerHTML = [
+      tile("Days on Earth", count(x.days), `That's ${x.years.toFixed(1)} trips around the Sun so far.`, true),
+      tile("Miles traveled", `${count(billions ? x.miles / 1e9 : x.miles / 1e6, 1)} ${billions ? "billion" : "million"}`, "Earth carries you around the Sun at about 67,000 mph, so you've covered all of this without leaving the couch.", true),
+      tile("Full moons", count(x.fullMoons), x.fullMoon ? `That's how many you've lived through. The next one is ${x.fullMoon.toLocaleDateString("en-US", { month: "long", day: "numeric" })}.` : "That's how many you've lived through.", true),
+      tile("Mercury retrogrades", count(x.mercury), "Mercury looks like it's moving backward about three times a year. Feel free to blame these for every missed text.", true),
+      sat,
+      tile("Next Jupiter return", x.jupiter ? fmtMonth(x.jupiter) : "Soon", "Jupiter, the planet of luck and growth, comes back to its spot in your chart about every 12 years. Astrologers treat it as a fresh start.")
+    ].join("");
+  }
+
+  function renderEnd(x) {
+    $("end-title").textContent = `That's your sky, ${chart.input.name}.`;
+    $("end-lead").textContent = x.birthdayIn === 0
+      ? "And it's your birthday today. Happy solar return!"
+      : `Your next birthday, also called your solar return, is in ${x.birthdayIn} day${x.birthdayIn === 1 ? "" : "s"}. Share your chart, or draw one for someone you know.`;
   }
 
   function moonIcon(elong) {
     const r = 18, c = 20;
     const k = Math.abs(Math.cos(elong * RAD)) * r;
     const waxing = elong < 180;
-    const outerSweep = waxing ? 1 : 0;
     const crescent = waxing ? elong < 90 : elong >= 270;
     const termSweep = waxing ? (crescent ? 0 : 1) : (crescent ? 1 : 0);
-    const path = `M${c},${c - r} A${r},${r} 0 0 ${outerSweep} ${c},${c + r} A${k.toFixed(2)},${r} 0 0 ${termSweep} ${c},${c - r} Z`;
+    const path = `M${c},${c - r} A${r},${r} 0 0 ${waxing ? 1 : 0} ${c},${c + r} A${k.toFixed(2)},${r} 0 0 ${termSweep} ${c},${c - r} Z`;
     return `<svg class="phase-icon" viewBox="0 0 40 40" aria-hidden="true"><circle class="dark" cx="${c}" cy="${c}" r="${r}"/><path class="lit" d="${path}"/></svg>`;
   }
 
-  function renderMore() {
-    const ph = MOON_PHASES[chart.phase];
-    const ch = chart.chinese;
-    const animal = CHINESE_ANIMALS[ch.animal];
-    const elName = ["Wood", "Fire", "Earth", "Metal", "Water"][ch.element];
-    const sun = chart.placements.Sun;
-    const decanNames = ["first", "second", "third"];
-    const lit = Math.round((1 - Math.cos(chart.elongation * RAD)) / 2 * 100);
-    const items = [
-      { label: "Moon phase at birth", value: `${moonIcon(chart.elongation)}${ph.name}`, text: `${lit}% of the Moon was lit. ${ph.text}` },
-      { label: `Decan of your Sun`, value: `${decanNames[chart.decan.n]} decan of ${sun.sign.name}`, text: `Each sign splits into three ten-degree decans. Yours is the ${chart.decan.sub.name} decan, ruled by ${chart.decan.sub.ruler}, which adds a ${chart.decan.sub.keywords.join(", ")} undertone to your ${sun.sign.name} Sun.` },
-      { label: "Chinese zodiac", value: `${elName} ${animal.name}`, text: `${animal.text} The ${elName} element adds ${CHINESE_ELEMENTS[elName]}. ${ch.yin ? "A yin year, receptive and inward." : "A yang year, active and outward."}` },
-      { label: "Day you were born", value: `${chart.day.day}, the day of ${chart.day.planet}`, text: `Each day of the week belongs to a planet. ${chart.day.day} is ${chart.day.text}.` },
-      { label: "Birthstone", value: chart.birthstone, text: `The modern birthstone for ${chart.dateLabel.split(" ")[1]}.` },
-      { label: "Ruling planet", value: sun.sign.ruler, text: `${sun.sign.ruler} rules ${sun.sign.name}, so it is the planet most responsible for your Sun. In your chart, ${sun.sign.ruler} sits in ${chart.placements[sun.sign.ruler].sign.name}${chart.placements[sun.sign.ruler].house ? ` in the ${houseLabel(chart.placements[sun.sign.ruler].house)}` : ""}.` }
-    ];
-    $("more-grid").innerHTML = items.map(it => `<div class="more-item"><p class="label">${it.label}</p><p class="value">${it.value}</p><p>${it.text}</p></div>`).join("");
+  function animateCounts(scope) {
+    scope.querySelectorAll(".count:not(.done)").forEach(el => {
+      el.classList.add("done");
+      const to = +el.dataset.to, dec = +el.dataset.dec;
+      const fmt = v => dec ? v.toFixed(dec) : Math.round(v).toLocaleString();
+      if (reducedMotion) { el.textContent = fmt(to); return; }
+      const start = performance.now(), dur = 1400;
+      const step = t => {
+        const p = Math.min(1, (t - start) / dur);
+        el.textContent = fmt(to * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
   }
 
   function summaryText() {
     const lines = [`${chart.input.name}'s chart`, `Born ${chart.dateLabel}${chart.timeLabel ? ` at ${chart.timeLabel}` : ""} in ${chart.input.placeLabel}`, ""];
-    if (chart.timeKnown) lines.push(`Rising: ${SIGNS[chart.ascSign].name} ${ASTRO.formatDegree(chart.ang.asc)}`);
+    if (chart.timeKnown) lines.push(`Rising: ${SIGNS[chart.ascSign].name}`);
     for (const p of PLANETS) {
       const pl = chart.placements[p.key];
-      lines.push(`${p.label || p.key}: ${pl.sign.name} ${ASTRO.formatDegree(pl.lon)}${pl.house ? `, ${houseLabel(pl.house)}` : ""}${pl.retrograde ? " Rx" : ""}`);
+      lines.push(`${p.label || p.key}: ${pl.sign.name}${pl.house ? `, ${ordinal(pl.house)} house` : ""}${pl.retrograde ? " (retrograde)" : ""}`);
     }
     lines.push("", `Moon phase: ${MOON_PHASES[chart.phase].name}`, `Chinese zodiac: ${["Wood", "Fire", "Earth", "Metal", "Water"][chart.chinese.element]} ${CHINESE_ANIMALS[chart.chinese.animal].name}`);
     return lines.join("\n");
@@ -2149,30 +2886,97 @@ const ASTRO = (() => {
       await navigator.clipboard.writeText(text);
       btn.textContent = done;
     } catch (e) {
-      btn.textContent = "Couldn't copy, try selecting the text";
+      btn.textContent = "Couldn't copy, try again";
     }
     setTimeout(() => { btn.textContent = old; }, 2200);
+  }
+
+  let wheelShown = false;
+
+  function onSlideIn(slide) {
+    animateCounts(slide);
+    if (slide.id === "s-wheel" && !wheelShown) {
+      wheelShown = true;
+      const wrap = $("wheel-wrap");
+      wrap.classList.add("reveal");
+      setTimeout(() => wrap.classList.remove("reveal"), 4500);
+    }
+  }
+
+  function wireDeck() {
+    const slides = [...document.querySelectorAll(".slide")];
+    const dots = $("dots");
+    dots.innerHTML = slides.map((s, i) => `<button type="button" data-i="${i}" aria-label="${s.dataset.label}"></button>`).join("");
+    dots.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (b) slides[+b.dataset.i].scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+    });
+    const flipObs = new IntersectionObserver(entries => entries.forEach(en => {
+      en.target.classList.toggle("in", en.isIntersecting);
+      if (en.isIntersecting) onSlideIn(en.target);
+    }), { threshold: 0.2 });
+    const sections = [["s-basics", "Basics"], ["s-sun", "Big three"], ["s-wheel", "Wheel"], ["s-planets", "Planets"], ["s-houses", "Life areas"], ["s-mix", "Your mix"], ["s-links", "Connections"], ["s-facts", "Fun facts"]];
+    const jump = $("jump");
+    jump.innerHTML = sections.map(([id, label]) => `<a href="#${id}" data-at="${slides.findIndex(s => s.id === id)}">${label}</a>`).join("");
+    jump.addEventListener("click", e => {
+      const a = e.target.closest("a");
+      if (!a) return;
+      e.preventDefault();
+      slides[+a.dataset.at].scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+    });
+    const links = [...jump.children];
+    const activeObs = new IntersectionObserver(entries => entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const i = slides.indexOf(en.target);
+      [...dots.children].forEach((b, n) => b.classList.toggle("on", n === i));
+      $("counter").textContent = `${i + 1} / ${slides.length}`;
+      const current = links.filter(a => +a.dataset.at <= i).pop();
+      links.forEach(a => a.classList.toggle("on", a === current));
+    }), { rootMargin: "-50% 0px -50% 0px" });
+    slides.forEach(s => { flipObs.observe(s); activeObs.observe(s); });
+    document.addEventListener("click", e => {
+      const card = e.target.closest(".pcard");
+      if (card) {
+        const on = card.classList.toggle("flipped");
+        card.setAttribute("aria-pressed", on ? "true" : "false");
+      }
+      const ht = e.target.closest(".htile");
+      if (ht) {
+        document.querySelectorAll(".htile.on").forEach(t => t.classList.remove("on"));
+        ht.classList.add("on");
+        $("hdetail").innerHTML = houseDetail(+ht.dataset.house);
+      }
+      if (e.target.closest("[data-restart]")) restart();
+    });
   }
 
   function showResults(fromLink) {
     const intro = $("intro");
     const results = $("results");
+    const x = computeExtras();
     renderHero();
+    renderExample();
+    renderBigThreeSlides();
+    wheelShown = false;
     drawWheel();
-    renderPlanets();
-    renderHouses();
-    renderBalance();
-    renderAspects();
-    renderMore();
     setFocus(chart.timeKnown ? "asc" : "planet", chart.timeKnown ? null : "Sun");
-    $("jump").hidden = false;
+    renderCards();
+    renderHouses();
+    renderMix();
+    renderLinks();
+    renderFacts(x);
+    renderNumbers(x);
+    renderEnd(x);
     const go = () => {
       intro.hidden = true;
       intro.classList.remove("leaving");
+      document.documentElement.classList.add("deck-on");
+      if (!reducedMotion) document.documentElement.classList.add("flip");
       results.hidden = false;
-      results.classList.add("reveal");
+      $("dots").hidden = false;
+      $("counter").hidden = false;
+      $("jump").hidden = false;
       window.scrollTo({ top: 0, behavior: "instant" });
-      setTimeout(() => results.classList.remove("reveal"), 4500);
     };
     if (reducedMotion || fromLink) go();
     else {
@@ -2183,26 +2987,31 @@ const ASTRO = (() => {
 
   function restart() {
     $("results").hidden = true;
+    $("dots").hidden = true;
+    $("counter").hidden = true;
     $("jump").hidden = true;
+    document.documentElement.classList.remove("deck-on", "flip");
     $("intro").hidden = false;
     history.replaceState(null, "", location.pathname);
-    window.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0, behavior: "instant" });
     $("name").focus();
   }
 
   async function submit(e) {
     if (e) e.preventDefault();
     const name = $("name").value.trim();
-    const date = $("date").value;
     const noTime = $("no-time").checked;
-    const time = noTime ? "" : $("time").value;
+    const date = parseDate($("date").value);
+    const time = noTime ? "" : parseTime($("time").value);
     const placeText = $("place").value.trim();
     const manualLat = $("lat").value, manualLon = $("lon").value, manualOff = $("offset").value;
     ["name", "date", "time", "place"].forEach(id => $(id).removeAttribute("aria-invalid"));
 
     if (!name) { $("name").setAttribute("aria-invalid", "true"); note("Add your name so the chart knows who it belongs to."); $("name").focus(); return; }
-    if (!date) { $("date").setAttribute("aria-invalid", "true"); note("Add your date of birth."); $("date").focus(); return; }
-    if (!noTime && !time) { $("time").setAttribute("aria-invalid", "true"); note("Add your birth time, or tick the box if you don't know it."); $("time").focus(); return; }
+    if (!date) { $("date").setAttribute("aria-invalid", "true"); note("Type your birthday like 11/10/2000."); $("date").focus(); return; }
+    if (!noTime && !time) { $("time").setAttribute("aria-invalid", "true"); note("Type your birth time like 11:07 am, or tick the box if you don't know it."); $("time").focus(); return; }
+    $("date").value = showDate(date);
+    if (time) $("time").value = showTime(time);
 
     const input = { name, date, time, placeLabel: placeText };
     const usingManual = manualLat !== "" && manualLon !== "";
@@ -2261,37 +3070,24 @@ const ASTRO = (() => {
     } catch (e) {
       return false;
     }
-    $("name").value = input.name; $("date").value = input.date; $("time").value = input.time; $("place").value = input.placeLabel;
+    $("name").value = input.name;
+    $("date").value = showDate(input.date);
+    $("time").value = input.time ? showTime(input.time) : "";
+    $("place").value = input.placeLabel;
     if (!input.time) { $("no-time").checked = true; $("time").disabled = true; }
     showResults(true);
     return true;
   }
 
-  function wireNav() {
-    const links = [...document.querySelectorAll(".jump a")];
-    const targets = links.map(a => document.querySelector(a.getAttribute("href")));
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === `#${en.target.id}`));
-        }
-      });
-    }, { rootMargin: "-40% 0px -55% 0px" });
-    targets.forEach(t => t && obs.observe(t));
-  }
-
   function init() {
     startSky();
     wirePlaceSearch();
-    wireNav();
+    wireDateTime();
+    wireDeck();
     $("birth-form").addEventListener("submit", submit);
-    $("restart").addEventListener("click", restart);
     $("copy").addEventListener("click", e => copyText(summaryText(), e.currentTarget, "Copied"));
     $("share").addEventListener("click", e => copyText(shareUrl(), e.currentTarget, "Link copied"));
-    document.addEventListener("click", e => {
-      const r = e.target.closest("[data-planet-row]");
-      if (r && r.open === false) setFocus("planet", r.dataset.planetRow);
-    });
+    $("restart").addEventListener("click", restart);
     loadFromUrl();
   }
 
