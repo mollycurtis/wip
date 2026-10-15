@@ -1480,7 +1480,7 @@ const ASTRO = (() => {
     };
   }
 
-  async function searchPlaces(q) {
+  async function searchOpenMeteo(q) {
     const parts = q.split(",").map(s => s.trim()).filter(Boolean);
     if (!parts.length) return [];
     const words = parts[0].split(/\s+/);
@@ -1497,6 +1497,47 @@ const ASTRO = (() => {
       if (!fallback.length) fallback = results;
     }
     return fallback.slice(0, 6).map(toPlace);
+  }
+
+  async function searchPhoton(q) {
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=10&lang=en&osm_tag=place`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("photon");
+    const data = await res.json();
+    const seen = new Set();
+    return (data.features || [])
+      .filter(f => f.properties && f.properties.name && f.geometry)
+      .map(f => ({
+        name: f.properties.name,
+        region: [f.properties.state, f.properties.country].filter(Boolean).join(", "),
+        lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0]
+      }))
+      .filter(p => { const k = `${p.name}|${p.region}`; if (seen.has(k)) return false; seen.add(k); return true; })
+      .slice(0, 6);
+  }
+
+  async function searchPlaces(q) {
+    let failed = 0;
+    try { const a = await searchOpenMeteo(q); if (a.length) return a; } catch (e) { failed++; }
+    try { const b = await searchPhoton(q); if (b.length) return b; } catch (e) { failed++; }
+    if (failed === 2) throw new Error("offline");
+    return [];
+  }
+
+  function validZone(tz) {
+    if (!tz) return null;
+    try { new Intl.DateTimeFormat("en-US", { timeZone: tz }); return tz; } catch (e) { return null; }
+  }
+
+  async function timezoneFor(lat, lon) {
+    try {
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto&forecast_days=1`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return validZone(data.timezone);
+    } catch (e) {
+      return null;
+    }
   }
 
   function placeLabel(p) { return p.region ? `${p.name}, ${p.region}` : p.name; }
@@ -2075,21 +2116,29 @@ const ASTRO = (() => {
       $("cast").disabled = true;
       note("Finding that place on the map", true);
       let place = selectedPlace;
+      let offline = false;
       if (!place) {
         try {
           const results = await searchPlaces(placeText);
           place = results[0];
         } catch (err) {
-          place = null;
+          offline = true;
         }
       }
-      $("cast").disabled = false;
       if (!place) {
+        $("cast").disabled = false;
         $("place").setAttribute("aria-invalid", "true");
-        note("That place didn't come up. Try the nearest larger city, or enter coordinates by hand below.");
+        note(offline
+          ? "Couldn't reach the place search. Check your connection, or enter coordinates by hand below."
+          : "That place didn't come up. Try just the city name, or enter coordinates by hand below.");
         return;
       }
-      input.lat = place.lat; input.lon = place.lon; input.tz = place.tz;
+      let tz = validZone(place.tz);
+      if (!tz) tz = await timezoneFor(place.lat, place.lon);
+      $("cast").disabled = false;
+      input.lat = place.lat; input.lon = place.lon;
+      if (tz) input.tz = tz;
+      else input.offset = Math.round(place.lon / 15);
       input.placeLabel = placeLabel(place);
     }
     note("");
